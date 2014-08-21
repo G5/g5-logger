@@ -1,5 +1,7 @@
 require 'g5/logger'
 require 'pry'
+require 'rspec/its'
+require 'vcr'
 
 ROOTPATH = File.expand_path('..', __FILE__)
 Dir[File.join(ROOTPATH, 'support/**/*.rb')].each { |support| require support }

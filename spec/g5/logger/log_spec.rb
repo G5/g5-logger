@@ -9,4 +9,21 @@ describe G5::Logger::Log do
       end
     end
   end
+
+  describe :log do
+    let(:params) do
+      {source_name:                 'test',
+       level:                       3,
+       external_parent_id:          33,
+       external_parent_source_name: 'g5-jobs',
+       title:                       'test title',
+       message:                     'a big error occurred'}
+    end
+    subject do
+      VCR.use_cassette('logging') do
+        G5::Logger::Log.log(params)
+      end
+    end
+    its(:code) { is_expected.to eq(201) }
+  end
 end
