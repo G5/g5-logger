@@ -15,10 +15,6 @@ module G5
       }
 
       class << self
-        def create_req_resp_log(attributes)
-
-        end
-
         Levels.each_pair do |name, level|
           define_method(name) do |attributes|
             log({level: level}.merge(attributes))
@@ -27,7 +23,7 @@ module G5
 
         def log(attributes)
           default_merge = {source_name: Config[:source_name]}.merge(attributes)
-          result        = Typhoeus.post(Config[:logging_service_endpoint], body: default_merge.to_json, headers: {'content-type' => 'application/json', Accept: 'application/json'})
+          result        = Typhoeus.post(Config[:logging_service_endpoint], body: {log: default_merge}.to_json, headers: {'content-type' => 'application/json', Accept: 'application/json'})
           puts "error in posting log status: #{result.code} body: #{result.body}" unless 201 == result.code
           result
         end

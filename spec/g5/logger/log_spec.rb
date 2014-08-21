@@ -26,4 +26,31 @@ describe G5::Logger::Log do
     end
     its(:code) { is_expected.to eq(201) }
   end
+
+  describe :create_req_resp_log do
+    let(:params) do
+      {source_name:                 'test',
+       level:                       3,
+       external_parent_id:          33,
+       external_parent_source_name: 'g5-jobs',
+       title:                       'attachments title',
+       attachments_attributes:      [{
+                                         doc_file_name:    'req.xml',
+                                         doc_content_type: 'text/xml',
+                                         doc:              '<request></request>'
+                                     },
+                                     {
+                                         doc_file_name:    'resp.xml',
+                                         doc_content_type: 'text/xml',
+                                         doc:              '<resp/>'
+                                     }]
+      }
+    end
+    subject do
+      VCR.use_cassette('logging-request-response') do
+        G5::Logger::Log.log(params)
+      end
+    end
+    its(:code) { is_expected.to eq(201) }
+  end
 end
