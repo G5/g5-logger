@@ -22,7 +22,7 @@ module G5
         end
 
         def log(attributes)
-          default_merge = {source_name: Config[:source_name]}.merge(attributes)
+          default_merge = {source_name: Config[:source_name], source_created_at: Time.now}.merge(attributes)
           result        = Typhoeus.post(Config[:logging_service_endpoint], body: {log: default_merge}.to_json, headers: {'content-type' => 'application/json', Accept: 'application/json'})
           puts "error in posting log status: #{result.code} body: #{result.body}" unless 201 == result.code
           result

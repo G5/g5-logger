@@ -40,9 +40,9 @@ describe G5::Logger::Log do
                                          doc:              '<request></request>'
                                      },
                                      {
-                                         doc_file_name:    'resp.xml',
-                                         doc_content_type: 'text/xml',
-                                         doc:              '<resp/>'
+                                         doc_file_name:    'resp.json',
+                                         doc_content_type: 'application/json',
+                                         doc:              {foo: 'bar'}.to_json
                                      }]
       }
     end
