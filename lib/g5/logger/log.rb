@@ -20,6 +20,20 @@ module G5
         def level(level)
           Levels.include?(level) ? level : :info
         end
+
+        def log_json_req_resp(request, response, options={})
+          options = options.merge(
+              status:   response.try(:code),
+              request:  request,
+              response: response.try(:body))
+
+          send(log_method(response.code), options)
+        end
+
+        def log_method(code)
+          error = code > 299 rescue false
+          error ? :error : :info
+        end
       end
     end
   end
