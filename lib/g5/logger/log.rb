@@ -13,12 +13,19 @@ module G5
         def log(attributes)
           default_merge = {source_app_name: Config[:source_app_name]}.merge(attributes)
           log_level     = level(default_merge.delete(:level))
-          log_entry     = default_merge.keys.collect { |key| "#{key}=\"#{default_merge[key]}\"" }.join(", ")
-          Config[:logger].send(log_level, log_entry)
+          Config[:logger].send(log_level, log_entry(default_merge))
         end
 
         def level(level)
           Levels.include?(level) ? level : :info
+        end
+
+        def log_entry(hash)
+          if  G5::Logger::KEY_VALUE_FORMAT== G5::Logger::Config[:format]
+            hash.keys.collect { |key| "#{key}=\"#{hash[key]}\"" }.join(", ")
+          else
+            hash.to_json
+          end
         end
 
         def log_json_req_resp(request, response, options={})
