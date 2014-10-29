@@ -14,3 +14,5 @@
 mkmf.log
 
 /.idea/
+
+/g5-logger*.gem

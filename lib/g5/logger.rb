@@ -10,7 +10,9 @@ module G5
     Config           = {
         logger:          'REQUIRED', #usually Rails.logger
         source_app_name: 'REQUIRED - this is the name of the app using it',
-        format:          JSON_FORMAT # json or key_value
+        format:          JSON_FORMAT, # json or key_value
+        redact_keys:     [/credit/, /password/, /cvv/],
+        redact_value:    '***'
     }
   end
 end
