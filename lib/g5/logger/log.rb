@@ -45,21 +45,15 @@ module G5
 
         def redact(hash)
           hash.keys.each do |key|
-            if hash[key].kind_of?(Hash)
-              redact hash[key]
-            elsif hash[key].kind_of?(Array)
-              hash[key].each do |array_val|
-                redact array_val if array_val.kind_of?(Hash)
-              end
-            else
-              hash[key] = Config[:redact_value] if redactable?(key)
-            end
+            redact(hash[key]) if hash[key].kind_of?(Hash)
+            redact_array(hash[key]) if hash[key].kind_of?(Array)
+            hash[key] = Config[:redact_value] if redactable?(key)
           end
           hash
         end
 
         def redactable?(value)
-          return false if value.blank?
+          return false if value.blank? || ![String, Symbol].include?(value.class)
           !!Config[:redact_keys].detect { |rk|
             if rk.class == String
               rk == value
@@ -67,6 +61,12 @@ module G5
               value.match(rk)
             end
           }
+        end
+
+        def redact_array(array)
+          array.each do |array_val|
+            redact array_val if array_val.kind_of?(Hash)
+          end
         end
       end
     end
