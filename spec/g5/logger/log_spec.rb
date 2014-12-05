@@ -6,19 +6,23 @@ describe G5::Logger::Log do
 
     describe 'redact sensitive data' do
       before do
+        G5::Logger::Config[:default_log_hash] = {external_parent_source_name: 'g5-jobs'}
         G5::Logger::Config[:redact_keys] << 'redactme'
+      end
+      after do
+        G5::Logger::Config[:default_log_hash] = {}
       end
       let(:request) { {'credit_card' => '4344122144442222', foo: 'bar', parent: {cvv: '323', jimmy: 'joe'}, 'array' => [{'my_password' => 'jimpass', 'redactme' => 'secretval'}]} }
       let(:body) { {credit_exp_date: '10/2015', whatever: 'brah'} }
       let(:response) { double(:response, code: 201, body: body) }
-      let(:redact_value) {G5::Logger::Config[:redact_value]}
+      let(:redact_value) { G5::Logger::Config[:redact_value] }
 
       subject do
         G5::Logger::Log.log_json_req_resp(request, response, {foo: 'bar', 'j_cvv' => 343})
         indifferent_hash_from_json TestLogger.last_payload
       end
 
-      it { is_expected.to eq({"source_app_name" => "test", "foo" => "bar", "j_cvv" => redact_value, "status" => 201,
+      it { is_expected.to eq({"source_app_name" => "test", "external_parent_source_name" => "g5-jobs", "foo" => "bar", "j_cvv" => redact_value, "status" => 201,
                               "request"         => {"credit_card" => redact_value, "foo" => "bar",
                                                     "parent"      => {"cvv" => redact_value, "jimmy" => "joe"},
                                                     "array"       => [{"my_password" => redact_value, "redactme" => redact_value}]},

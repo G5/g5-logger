@@ -12,7 +12,8 @@ module G5
         source_app_name: 'REQUIRED - this is the name of the app using it',
         format:          JSON_FORMAT, # json or key_value
         redact_keys:     [/credit/, /password/, /cvv/],
-        redact_value:    '***'
+        redact_value:    '***',
+        default_log_hash: {} #when you Log.log(your_hash), your_hash will get merged into the default_log_hash
     }
   end
 end
