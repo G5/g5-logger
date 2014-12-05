@@ -11,7 +11,7 @@ module G5
         end
 
         def log(attributes)
-          default_merge = {source_app_name: Config[:source_app_name]}.merge(attributes)
+          default_merge = {source_app_name: Config[:source_app_name]}.merge(Config[:default_log_hash]).merge(attributes)
           log_level     = level(default_merge.delete(:level))
           Config[:logger].send(log_level, log_entry(default_merge))
         end
