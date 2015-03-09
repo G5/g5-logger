@@ -1,5 +1,6 @@
 require 'g5/logger/version'
 require 'g5/logger/log'
+require 'active_support'
 require 'active_support/core_ext'
 
 module G5
