@@ -12,7 +12,7 @@ describe G5::Logger::Log do
       after do
         G5::Logger::Config[:default_log_hash] = {}
       end
-      let(:request) { {'credit_card' => '4344122144442222', foo: 'bar', ssn: '333224444', date_of_birth: '05-15-1976', parent: {cvv: '323', jimmy: 'joe'}, 'array' => [{'my_password' => 'jimpass', 'redactme' => 'secretval'}]} }
+      let(:request) { {'credit_card' => '4344122144442222', foo: 'bar', ssn: '333224444', date_of_birth: '05-15-1976', annual_salary: '$89000', parent: {cvv: '323', jimmy: 'joe'}, 'array' => [{'my_password' => 'jimpass', 'redactme' => 'secretval'}]} }
       let(:body) { {credit_exp_date: '10/2015', whatever: 'brah'} }
       let(:response) { double(:response, code: 201, body: body) }
       let(:redact_value) { G5::Logger::Config[:redact_value] }
@@ -24,7 +24,7 @@ describe G5::Logger::Log do
 
       it { is_expected.to eq({"source_app_name" => "test", "external_parent_source_name" => "g5-jobs", "foo" => "bar", "j_cvv" => redact_value, "status" => 201,
                               "request"         => {"credit_card" => redact_value, "foo" => "bar",
-                                                    "ssn"=>redact_value, "date_of_birth"=>redact_value,
+                                                    "ssn"=>redact_value, "date_of_birth"=>redact_value, "annual_salary"=>redact_value,
                                                     "parent"      => {"cvv" => redact_value, "jimmy" => "joe"},
                                                     "array"       => [{"my_password" => redact_value, "redactme" => redact_value}]},
                               "response"        => {"credit_exp_date" => redact_value, "whatever" => "brah"}}) }
