@@ -23,7 +23,11 @@ module G5
         def log_entry(hash)
           scrubbed = redact hash.clone
           if  G5::Logger::KEY_VALUE_FORMAT== G5::Logger::Config[:format]
-            scrubbed.keys.collect { |key| "#{key}=\"#{hash[key]}\"" }.join(", ")
+            scrubbed.keys.collect do |key|
+              value = hash[key]
+              value.scrub!("?") if value.respond_to?(:scrub)
+              "#{key}=\"#{value}\""
+            end.join(", ")
           else
             scrubbed.to_json
           end
