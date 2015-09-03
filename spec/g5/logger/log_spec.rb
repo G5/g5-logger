@@ -127,24 +127,26 @@ describe G5::Logger::Log do
         ].join(", ")
         is_expected.to eq(expected_string)
       end
+
+      it ""
     end
 
     describe :log_json_req_resp do
       let(:request) { 'req' }
       let(:code) { 201 }
-      let(:body) { 'body' }
+      let(:body) { "abc\u3042\x81" }
       let(:response) { double(:response, code: code, body: body) }
       subject do
         G5::Logger::Log.log_json_req_resp(request, response, {foo: 'bar'})
         TestLogger.last_payload
       end
-      it do
+      it "formats and logs, recovering from any encoding errors" do
         expected_string = [
           'source_app_name="test"',
           'foo="bar"',
           'status="201"',
           'request="req"',
-          'response="body"',
+          %Q(response="abc\u3042?"),
         ].join(", ")
         is_expected.to eq(expected_string)
       end
