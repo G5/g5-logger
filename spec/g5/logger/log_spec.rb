@@ -20,8 +20,9 @@ describe G5::Logger::Log do
           date_of_birth: '05-15-1976', 
           annual_salary: '$89000', 
           'e-content' => "this should be redacted",
-          "comments" => "this should be redacted",
-          "message" => "this should be redacted",
+          "comments"  => "this should be redacted",
+          "message"   => "this should be redacted",
+          "notes"     => "this should be redacted",
           parent: {
             cvv: '323', 
             jimmy: 'joe'
@@ -52,6 +53,7 @@ describe G5::Logger::Log do
                                                     "e-content"     => redact_value,
                                                     "comments"      => redact_value,
                                                     "message"       => redact_value,
+                                                    "notes"         => redact_value,
                                                     "parent"        => {"cvv" => redact_value, "jimmy" => "joe"},
                                                     "array"         => [{"my_password" => redact_value, "redactme" => redact_value}]},
                               "response"        => {"credit_exp_date" => redact_value, "whatever" => "brah"}}) }

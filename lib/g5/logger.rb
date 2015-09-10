@@ -12,7 +12,7 @@ module G5
         logger:          'REQUIRED', #usually Rails.logger
         source_app_name: 'REQUIRED - this is the name of the app using it',
         format:          JSON_FORMAT, # json or key_value
-        redact_keys:     [/credit/, /password/, /cvv/, /ssn/, /birth/, /drivers/, /salary/, /e-content/, /message/, /comment/],
+        redact_keys:     [/credit/, /password/, /cvv/, /ssn/, /birth/, /drivers/, /salary/, /e-content/, /message/, /comment/, /note/],
         redact_value:    '***',
         default_log_hash: {} #when you Log.log(your_hash), your_hash will get merged into the default_log_hash
     }
