@@ -27,7 +27,9 @@ module G5
                             /tel/,
                             /phone/,
                             /address/,
-                            /email/
+                            /email/,
+                            /card/,
+                            /amount/,
                          ],
         redact_value:    '***',
         default_log_hash: {} #when you Log.log(your_hash), your_hash will get merged into the default_log_hash
