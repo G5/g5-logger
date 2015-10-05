@@ -12,13 +12,13 @@ describe G5::Logger::Log do
       after do
         G5::Logger::Config[:default_log_hash] = {}
       end
-      let(:request) { 
+      let(:request) {
         {
-          'credit_card' => '4344122144442222', 
-          foo: 'bar', 
-          ssn: '333224444', 
-          date_of_birth: '05-15-1976', 
-          annual_salary: '$89000', 
+          'credit_card' => '4344122144442222',
+          foo: 'bar',
+          ssn: '333224444',
+          date_of_birth: '05-15-1976',
+          annual_salary: '$89000',
           'e-content' => "this should be redacted",
           "comments"  => "this should be redacted",
           "message"   => "this should be redacted",
@@ -29,16 +29,16 @@ describe G5::Logger::Log do
           "p-email"   => "this should be redacted",
           parent: {
 
-            cvv: '323', 
+            cvv: '323',
             jimmy: 'joe'
-          }, 
+          },
           'array' => [
             {
-              'my_password' => 'jimpass', 
+              'my_password' => 'jimpass',
               'redactme' => 'secretval'
             }
           ]
-        } 
+        }
       }
       let(:body) { {credit_exp_date: '10/2015', whatever: 'brah'} }
       let(:response) { double(:response, code: 201, body: body) }
@@ -50,10 +50,10 @@ describe G5::Logger::Log do
       end
 
       it { is_expected.to eq({"source_app_name" => "test", "external_parent_source_name" => "g5-jobs", "foo" => "bar", "j_cvv" => redact_value, "status" => 201,
-                              "request"         => {"credit_card"   => redact_value, 
+                              "request"         => {"credit_card"   => redact_value,
                                                     "foo"           => "bar",
-                                                    "ssn"           => redact_value, 
-                                                    "date_of_birth" => redact_value, 
+                                                    "ssn"           => redact_value,
+                                                    "date_of_birth" => redact_value,
                                                     "annual_salary" => redact_value,
                                                     "e-content"     => redact_value,
                                                     "comments"      => redact_value,
@@ -71,7 +71,9 @@ describe G5::Logger::Log do
     describe :log_json_req_resp do
       let(:request) { {payload: 'foo'} }
       let(:code) { 201 }
-      let(:body) { {model: {id: 1, name: 'yeah'}} }
+      let(:body) do
+        "{ \"model\": { \"id\": 1, \"name\": \"yeah\", \"cvv\": \"123\" } }"
+      end
       let(:response) { double(:response, code: code, body: body) }
       subject do
         G5::Logger::Log.log_json_req_resp(request, response, {foo: 'bar'})
@@ -81,7 +83,11 @@ describe G5::Logger::Log do
       its([:source_app_name]) { is_expected.to eq('test') }
       its([:foo]) { is_expected.to eq('bar') }
       its([:status]) { is_expected.to eq(201) }
-      its([:response]) { is_expected.to eq({"model" => {"id" => 1, "name" => "yeah"}}) }
+      its([:response]) do
+        is_expected.to eq({
+          "model" => { "id" => 1, "name" => "yeah", "cvv" => "***" }
+        })
+      end
       its([:request]) { is_expected.to eq({"payload" => "foo"}) }
     end
   end

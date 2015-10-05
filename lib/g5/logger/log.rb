@@ -33,7 +33,7 @@ module G5
           options = options.merge(
               status:   response.try(:code),
               request:  request,
-              response: response.try(:body))
+              response: hash_from(response.try(:body)))
 
           send(log_method(response.code), options)
         end
@@ -66,6 +66,18 @@ module G5
         def redact_array(array)
           array.each do |array_val|
             redact array_val if array_val.kind_of?(Hash)
+          end
+        end
+
+        private
+
+        def hash_from(arg)
+          return arg.to_h if arg.nil? || arg.is_a?(Hash)
+
+          begin
+            return JSON.parse(arg)
+          rescue JSON::ParserError
+            return arg
           end
         end
       end
