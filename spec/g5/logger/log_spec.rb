@@ -71,7 +71,9 @@ describe G5::Logger::Log do
     describe :log_json_req_resp do
       let(:request) { {payload: 'foo'} }
       let(:code) { 201 }
-      let(:body) { {model: {id: 1, name: 'yeah'}} }
+      let(:body) do
+        "{ \"model\": { \"id\": 1, \"name\": \"yeah\", \"cvv\": \"123\" } }"
+      end
       let(:response) { double(:response, code: code, body: body) }
       subject do
         G5::Logger::Log.log_json_req_resp(request, response, {foo: 'bar'})
@@ -81,7 +83,11 @@ describe G5::Logger::Log do
       its([:source_app_name]) { is_expected.to eq('test') }
       its([:foo]) { is_expected.to eq('bar') }
       its([:status]) { is_expected.to eq(201) }
-      its([:response]) { is_expected.to eq({"model" => {"id" => 1, "name" => "yeah"}}) }
+      its([:response]) do
+        is_expected.to eq({
+          "model" => { "id" => 1, "name" => "yeah", "cvv" => "***" }
+        })
+      end
       its([:request]) { is_expected.to eq({"payload" => "foo"}) }
     end
   end
