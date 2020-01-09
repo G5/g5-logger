@@ -37,7 +37,10 @@ describe G5::Logger::Log do
               'my_password' => 'jimpass',
               'redactme' => 'secretval'
             }
-          ]
+          ],
+          'ach_routing_number' => '123000220',
+          'ach_account_number' => '411111111125',
+          'ach_account_type' => '1'
         }
       }
       let(:body) { {credit_exp_date: '10/2015', whatever: 'brah'} }
@@ -64,7 +67,10 @@ describe G5::Logger::Log do
                                                     "address1"      => redact_value,
                                                     "p-email"       => redact_value,
                                                     "parent"        => {"cvv" => redact_value, "jimmy" => "joe"},
-                                                    "array"         => [{"my_password" => redact_value, "redactme" => redact_value}]},
+                                                    "array"         => [{"my_password" => redact_value, "redactme" => redact_value}],
+                                                    "ach_routing_number" => redact_value,
+                                                    "ach_account_number" => redact_value,
+                                                    "ach_account_type" => redact_value},
                               "response"        => {"credit_exp_date" => redact_value, "whatever" => "brah"}}) }
     end
 
