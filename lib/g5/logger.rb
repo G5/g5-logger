@@ -30,6 +30,7 @@ module G5
                             /email/,
                             /card/,
                             /amount/,
+                            /ach/,
                          ],
         redact_value:    '***',
         default_log_hash: {} #when you Log.log(your_hash), your_hash will get merged into the default_log_hash
